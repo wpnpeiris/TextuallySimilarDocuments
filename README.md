@@ -34,3 +34,29 @@ The Jaccard similarity of sets S and T is `|S ∩ T|/|S ∪ T|`.
 JaccardSimilarity jaccardSimilarity = new JaccardSimilarity();
 double similarity = jaccardSimilarity.compute(set1, set2);
 ```
+
+### MinHash Signatures
+
+A set of shingles for a document are usually large. For a million of documents, it may not possible to calculate and store all shingles-sets. Minhashing provides a way to replace a larger set of shingles with smaller representation called `signatures`.
+
+`MinHashing` provides the abstraction for generating Minhashing signatures for a given set of hashed shingles.
+
+```java
+MinHashing minHashing = new (hashedShingles, numHashFunctions, coefficients, constants);
+List<Integer> signatures = minHashing.generateMinHashSingnatures();
+```
+
+The key idea of MinHash signature is;
+  - It take *k* independent hash functions
+  - Apply hash function to the elements, which result a vector of k minHash values
+  
+### Locality-Sensitive Hashing (LSH)
+
+Minihashing compresses a large set of shingles into small signatures. But, the number of pairs in a document set can be still large for the computation. Locality-sensitive hashing
+(LSH) provides a way to identify document pairs that are likely to be similar, without investigating every pair. 
+`LocalitySensitiveHashing` provides the implementation for finding possible similar pairs for a given set of minhasing signatures.
+
+```java
+LocalitySensitiveHashing lsh = new LocalitySensitiveHashing(minHashSignatures, threshold, bands, rows, bucketSize);
+Set<String> candidatePairs = lsh.generateCandidatePairs();
+```
